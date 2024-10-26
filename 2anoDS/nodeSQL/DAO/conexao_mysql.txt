@@ -1,0 +1,68 @@
+------------------------------------CONEXAO--------------------------------------
+import mysql from "mysql2/promise"
+import { config } from "dotenv";
+ 
+config()
+ 
+export default function conexao(){
+    const pool = mysql.createPool({
+        host: process.env.HOST_DATABASE, 
+        port:  process.env.PORT,
+        user: process.env.USER, 
+        password: process.env.PASSWORD, 
+        database: process.env.DATA_BASE
+    })
+ 
+    return pool
+}
+
+
+---------------------SELECT----------------------------------------------
+import conexao from "./conexao.js"
+ 
+export async function buscarAluno(rm, senha){
+    const query = `SELECT t.codigo_etec, t.curso, t.modulo, t.turno, a.turma, a.rm, a.nome FROM tbl_aluno a inner join tbl_turma t on t.codigo_turma = a.turma WHERE rm = ${rm} AND senha = '${senha}' `
+    console.log(query)
+    const conn = conexao()
+    try {
+        // Executar a consulta
+        const [rows, fields] = await conn.query(query);
+        //console.log('Dados consultados', results.affectedRows);
+        await conn.end()
+        return [rows]
+      } catch (err) {
+        return err.menssage
+      }
+}
+
+--------------------------------------------INSERT------------------------
+import conexao from "./conexao.js"
+ 
+export async function incluirPerfil(analista, comunicador, executor, planejador, rm_aluno, desempenhoAcademico, mediaNota, mediaFrequencia, penalidade, perfil){
+    let data = [
+                 [ parseInt(analista), 
+                  parseInt(comunicador), 
+                  parseInt(executor), 
+                  parseInt(planejador), 
+                  parseInt(rm_aluno), 
+                  parseFloat(desempenhoAcademico), 
+                  parseFloat(mediaNota),
+                  parseFloat(mediaFrequencia),
+                  parseFloat(penalidade),
+                  parseInt(perfil)
+                 ]
+              ]
+    const query = `INSERT INTO tbl_perfil (analista, comunicador, executor, planejador, rm_aluno, desempenhoAcademico, mediaNota, mediaFrequencia, penalidade, perfilDisc) VALUES ?`
+    console.log(query)
+    console.log(data)
+    const conn = conexao()
+    try {
+        // Executar a consulta
+        const [results] = await conn.query(query,[data]);
+        //console.log('Dados consultados', results.affectedRows);
+        await conn.end()
+        return results
+      } catch (err) {
+        return err.menssage
+      }
+}
