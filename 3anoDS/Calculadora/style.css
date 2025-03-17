@@ -35,7 +35,10 @@ body{
     font-size: 20px;
     margin-bottom: 16px;
     border-radius: 14px;
-    background-color: #027086;
+    background-color: #027086; 
+    color: aliceblue; 
+    padding: 12px;
+    font-size: 40px;
 }
 
 .box-buttons{
