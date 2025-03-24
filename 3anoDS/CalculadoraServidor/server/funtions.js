@@ -22,7 +22,9 @@ function resul( variavel) {
         return "Error 0";
     } else {
         try{
-            return eval(variavel);
+            var r = eval(variavel);
+            r = r.toString();
+            return r;
         } catch {
             return "Error com a conta";
         }
