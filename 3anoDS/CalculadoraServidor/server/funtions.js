@@ -19,14 +19,14 @@ function del(variavel) {
 
 function resul( variavel) {
     if (variavel === "0/0") {
-        return "Error 0";
+        throw new Error("Não é possivel divisão de 0 por 0.");
     } else {
         try{
             var r = eval(variavel);
             r = r.toString();
             return r;
         } catch {
-            return "Error com a conta";
+            throw new Error("Error com a conta");
         }
     }
     
